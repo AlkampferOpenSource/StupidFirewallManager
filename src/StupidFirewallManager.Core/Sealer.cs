@@ -1,24 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using System.Threading;
 
 namespace StupidFirewallManager.Core
 {
     public class Sealer
     {
         private readonly Configuration _configuration;
-        private const String SealRulePrefix = "_sfm_block_";
+        private readonly FirewallManager _firewallManager;
+        private readonly Timer _timer;
 
         public Sealer(Configuration configuration)
         {
             _configuration = configuration;
+            _firewallManager = new FirewallManager();
+            _timer = new Timer(CheckCallback, null, 1000, 1000 * 60);
         }
 
-        public void Seal() 
+        private void CheckCallback(object state)
         {
-                
+            _firewallManager.CheckForExpiredRules(_configuration.Rules);
+        }
+
+        public void Seal()
+        {
+            _firewallManager.ApplyUdpRules(_configuration.Rules);
+            _firewallManager.ApplyBasicTcpRules(_configuration.Rules);
+        }
+
+        public void OpenPortWithTimeout(int tcpPort, IPEndPoint endpoint, DateTime dateTime)
+        {
+            _firewallManager.OpenPortWithTimeout(tcpPort, endpoint, dateTime);
         }
     }
 }

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StupidFirewallManager.Core"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StupidFirewallManager.Tests", "StupidFirewallManager.Tests\StupidFirewallManager.Tests.csproj", "{85190885-7C81-4E12-BAD3-036ED3A08224}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StupidFirewallManager.Client", "StupidFirewallManager.Client\StupidFirewallManager.Client.csproj", "{93B91312-D4DE-4C89-A175-990B57DC53FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{85190885-7C81-4E12-BAD3-036ED3A08224}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85190885-7C81-4E12-BAD3-036ED3A08224}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85190885-7C81-4E12-BAD3-036ED3A08224}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B91312-D4DE-4C89-A175-990B57DC53FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B91312-D4DE-4C89-A175-990B57DC53FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B91312-D4DE-4C89-A175-990B57DC53FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B91312-D4DE-4C89-A175-990B57DC53FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

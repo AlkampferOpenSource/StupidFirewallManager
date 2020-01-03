@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StupidFirewallManager.Core
 {
@@ -14,12 +12,12 @@ namespace StupidFirewallManager.Core
         /// </summary>
         /// <param name="ports"></param>
         /// <returns></returns>
-        public static Range[] GetRangeExclusive(params Int32[] ports) 
+        public static Range[] GetRangeExclusive(params Int32[] ports)
         {
             List<Range> ranges = new List<Range>();
             Int32 actualPortSequence = 1;
             Int32 portIndex = 0;
-            while (portIndex < ports.Length) 
+            while (portIndex < ports.Length)
             {
                 var currentPort = ports[portIndex];
                 if (currentPort > actualPortSequence)
@@ -36,7 +34,35 @@ namespace StupidFirewallManager.Core
             return ranges.ToArray();
         }
 
-        public struct Range 
+        public static bool RangeContainsPort(string firewallDefinition, IEnumerable<int> controlledTcpPorts)
+        {
+            if (String.IsNullOrEmpty(firewallDefinition))
+                return false;
+
+            var singleEntry = firewallDefinition.Split(',', ';');
+            foreach (var entry in singleEntry)
+            {
+                if (entry.Contains('-'))
+                {
+                    var range = entry.Split('-');
+                    if (Int32.TryParse(range[0], out var low) && Int32.TryParse(range[1], out var high))
+                    {
+                        if (controlledTcpPorts.Any(p => p >= low && p <= high))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else if (Int32.TryParse(entry, out var port) && controlledTcpPorts.Contains(port))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public struct Range
         {
             public Range(int lowerPortInclusive, int upperPortInclusive)
             {
