@@ -28,9 +28,9 @@ namespace StupidFirewallManager.Core
             _firewallManager.ApplyBasicTcpRules(_configuration.Rules);
         }
 
-        public void TemporaryOpen(int tcpPort, IPEndPoint endpoint, DateTime dateTime)
+        public void OpenPortWithTimeout(int tcpPort, IPEndPoint endpoint, DateTime dateTime)
         {
-            throw new NotImplementedException();
+            _firewallManager.OpenPortWithTimeout(tcpPort, endpoint, dateTime);
         }
     }
 }

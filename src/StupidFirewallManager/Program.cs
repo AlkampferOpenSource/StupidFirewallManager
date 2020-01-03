@@ -46,7 +46,7 @@ namespace StupidFirewallManager
             }
 
             Log.Information("CORRECT! udp message in port {port} bound to rule for tcp port {tcpport} received from ip {ip}", e.Port, rule.TcpPort, e.Endpoint);
-            Sealer.TemporaryOpen(rule.TcpPort, e.Endpoint, DateTime.Now.AddMinutes(100));
+            Sealer.OpenPortWithTimeout(rule.TcpPort, e.Endpoint, DateTime.Now.AddMinutes(60 * 2));
         }
     }
 }
