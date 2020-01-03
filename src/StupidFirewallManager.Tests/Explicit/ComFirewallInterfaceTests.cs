@@ -3,11 +3,11 @@ using StupidFirewallManager.Core;
 
 namespace StupidFirewallManager.Tests.Explicit
 {
-    [TestFixture]
+    //[TestFixture]
     [Explicit]
     public class ComFirewallInterfaceTests
     {
-        [Test]
+        //[Test]
         [Explicit]
         public void CanExtractRules()
         {
@@ -15,7 +15,7 @@ namespace StupidFirewallManager.Tests.Explicit
             Assert.DoesNotThrow(() => sut.SearchFirewallRules());
         }
 
-        [Test]
+        //[Test]
         [Explicit]
         public void Can_add_simple_udp_rule()
         {

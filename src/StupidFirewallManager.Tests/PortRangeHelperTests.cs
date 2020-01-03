@@ -30,6 +30,19 @@ namespace StupidFirewallManager.Tests
             Assert.That(ranges, Is.EquivalentTo(expected));
         }
 
+        [TestCase("1000", new[] { 1000 }, true)]
+        [TestCase("1000", new[] { 2000, 1000 }, true)]
+        [TestCase("1000", new[] { 2000, 3000 }, false)]
+        [TestCase("1000-5000", new[] { 2000 }, true)]
+        [TestCase("1000,5000", new[] { 2000 }, false)]
+        [TestCase("1000,5000", new[] { 5000 }, true)]
+        [TestCase("1000,5000-6000", new[] { 5500 }, true)]
+        public void Contains_checker(String firewallPortDefinition, Int32[] ports, Boolean expected)
+        {
+            var containsRange = PortRangeHelper.RangeContainsPort(firewallPortDefinition, ports);
+            Assert.That(containsRange, Is.EqualTo(expected));
+        }
+
         private PortRangeHelper.Range[] CreateRange(int[] rangesExpected)
         {
             var rangeList = new List<PortRangeHelper.Range>();

@@ -60,6 +60,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DateTimeEncodingHelper.cs" />
     <Compile Include="FirewallManager.cs" />
     <Compile Include="PortRangeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

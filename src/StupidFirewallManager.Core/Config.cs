@@ -1,15 +1,17 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StupidFirewallManager.Core
 {
     public class Configuration
     {
         public FirewallRule[] Rules { get; set; }
+
+        public FirewallRule GetRuleFromUdpPort(int port)
+        {
+            return Rules.FirstOrDefault(r => r.UdpPort == port);
+        }
     }
 
     public class FirewallRule

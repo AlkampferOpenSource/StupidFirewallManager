@@ -46,7 +46,7 @@
       <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Exceptions, Version=5.4.0.0, Culture=neutral, PublicKeyToken=fc5550082a9c642c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Exceptions.5.4.0\lib\net472\Serilog.Exceptions.dll</HintPath>
+      <HintPath>..\packages\Serilog.Exceptions.5.4.0\lib\net461\Serilog.Exceptions.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.Console, Version=3.1.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigTests.cs" />
+    <Compile Include="DateTimeEncodingHelperTests.cs" />
     <Compile Include="Explicit\ComFirewallInterfaceTests.cs" />
     <Compile Include="PortRangeHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
