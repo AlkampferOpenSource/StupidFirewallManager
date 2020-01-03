@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29521.150
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StupidFirewallManager", "StupidFirewallManager\StupidFirewallManager.csproj", "{B37559AA-E8E8-4E95-8A15-2C5E4E3DC800}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StupidFirewallManager.Core", "StupidFirewallManager.Core\StupidFirewallManager.Core.csproj", "{A3EEAB34-FBE2-49F8-846E-50DA9CE06CBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StupidFirewallManager.Tests", "StupidFirewallManager.Tests\StupidFirewallManager.Tests.csproj", "{85190885-7C81-4E12-BAD3-036ED3A08224}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B37559AA-E8E8-4E95-8A15-2C5E4E3DC800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B37559AA-E8E8-4E95-8A15-2C5E4E3DC800}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B37559AA-E8E8-4E95-8A15-2C5E4E3DC800}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B37559AA-E8E8-4E95-8A15-2C5E4E3DC800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3EEAB34-FBE2-49F8-846E-50DA9CE06CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3EEAB34-FBE2-49F8-846E-50DA9CE06CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3EEAB34-FBE2-49F8-846E-50DA9CE06CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3EEAB34-FBE2-49F8-846E-50DA9CE06CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85190885-7C81-4E12-BAD3-036ED3A08224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85190885-7C81-4E12-BAD3-036ED3A08224}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85190885-7C81-4E12-BAD3-036ED3A08224}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85190885-7C81-4E12-BAD3-036ED3A08224}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F636517D-E8B0-4F7F-A15F-B9D013EFAADB}
+	EndGlobalSection
+EndGlobal

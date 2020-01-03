@@ -1,0 +1,10 @@
+{
+  "Rules" : [
+    {
+      "Name": "Rdp",
+      "UdpPort": 23456,
+      "TcpPort": 3389,
+      "Secret": "this_is_a_secret"
+    }
+  ]
+}
