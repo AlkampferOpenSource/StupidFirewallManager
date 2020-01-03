@@ -14,7 +14,7 @@ namespace StupidFirewallManager.Core
         {
             _configuration = configuration;
             _firewallManager = new FirewallManager();
-            _timer = new Timer(CheckCallback, null, 1000, 1000 * 60);
+            _timer = new Timer(CheckCallback, null, 1000, 1000 * 60 * 10);
         }
 
         private void CheckCallback(object state)
