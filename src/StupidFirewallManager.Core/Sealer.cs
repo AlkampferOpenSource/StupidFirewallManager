@@ -9,16 +9,17 @@ namespace StupidFirewallManager.Core
     public class Sealer
     {
         private readonly Configuration _configuration;
-        private const String SealRulePrefix = "_sfm_block_";
+        private readonly FirewallManager _firewallManager;
 
         public Sealer(Configuration configuration)
         {
             _configuration = configuration;
+            _firewallManager = new FirewallManager();
         }
 
-        public void Seal() 
+        public void Seal()
         {
-                
+            _firewallManager.ApplyUdpRules(_configuration.Rules);
         }
     }
 }
