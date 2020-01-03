@@ -46,7 +46,9 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="FirewallManager.cs" />
+    <Compile Include="PortRangeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sealer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
