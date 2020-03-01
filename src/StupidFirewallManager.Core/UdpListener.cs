@@ -7,6 +7,10 @@ using System.Threading;
 
 namespace StupidFirewallManager.Core
 {
+	/// <summary>
+	/// This is a basic listnener on udp without encryption, it was left for reference.
+	/// </summary>
+	[Obsolete("Unencrypted communication, unsecure, do not use", true)]
 	public class UdpListener : IDisposable
 	{
 		private readonly Dictionary<Int32, UdpClient> _listeners = new Dictionary<int, UdpClient>();

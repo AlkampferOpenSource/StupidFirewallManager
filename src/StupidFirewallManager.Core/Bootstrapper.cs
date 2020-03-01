@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Exceptions;
-using System.IO;
+using StupidFirewallManager.Common;
+using System;
 
 namespace StupidFirewallManager.Core
 {
@@ -27,9 +28,16 @@ namespace StupidFirewallManager.Core
 
         public static Configuration Configuration { get; private set; }
 
-        public static void Initialize() 
+        public static void Initialize()
         {
-            Configuration = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText("config.json"));
+            Configuration = new Configuration();
+
+            IConfiguration configBuilder = new ConfigurationBuilder()
+               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+               .AddJsonFile("config.json")
+               .Build();
+
+            Configuration.Bind(configBuilder);
         }
     }
 }

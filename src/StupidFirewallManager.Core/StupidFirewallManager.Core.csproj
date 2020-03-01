@@ -1,75 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A3EEAB34-FBE2-49F8-846E-50DA9CE06CBB}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StupidFirewallManager.Core</RootNamespace>
-    <AssemblyName>StupidFirewallManager.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Exceptions, Version=5.4.0.0, Culture=neutral, PublicKeyToken=fc5550082a9c642c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Exceptions.5.4.0\lib\net461\Serilog.Exceptions.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.Console, Version=3.1.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.File.4.1.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="CommandLineParser" version="2.7.82" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.2" />
+    <PackageReference Include="Newtonsoft.Json" version="12.0.3" />
+    <PackageReference Include="Serilog" version="2.9.0" />
+    <PackageReference Include="Serilog.Exceptions" version="5.4.0" />
+    <PackageReference Include="Serilog.Sinks.Console" version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" version="4.1.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="DateTimeEncodingHelper.cs" />
-    <Compile Include="FirewallManager.cs" />
-    <Compile Include="PortRangeHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sealer.cs" />
-    <Compile Include="UdpListener.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
+
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">
       <Guid>{58FBCF7C-E7A9-467C-80B3-FC65E8FCCA08}</Guid>
@@ -81,5 +29,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\StupidFirewallManager.Common\StupidFirewallManager.Common.csproj" />
+  </ItemGroup>
+
 </Project>

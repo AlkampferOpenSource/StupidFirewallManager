@@ -1,5 +1,6 @@
 ﻿using NetFwTypeLib;
 using Serilog;
+using StupidFirewallManager.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
