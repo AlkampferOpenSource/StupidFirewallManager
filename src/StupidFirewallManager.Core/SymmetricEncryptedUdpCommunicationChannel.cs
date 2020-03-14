@@ -13,8 +13,6 @@ namespace StupidFirewallManager.Common
         }
 
         private readonly Dictionary<Int32, UdpClient> _listeners = new Dictionary<int, UdpClient>();
-        private readonly string _serverAddress;
-        private readonly int _port;
         private bool _stopped = false;
 
         public void StartListeningOnPort(Int32 port)
@@ -81,6 +79,9 @@ namespace StupidFirewallManager.Common
 
     public class SymmetricEncryptedUdpCommunicationChannelSender : BaseSimmetricEncryptedCommunicationChannelSender
     {
+        private readonly string _serverAddress;
+        private readonly int _port;
+        
         public SymmetricEncryptedUdpCommunicationChannelSender(String serverAddress, Int32 port) : base()
         {
             _serverAddress = serverAddress;
@@ -92,10 +93,5 @@ namespace StupidFirewallManager.Common
             using var client = new UdpClient(_serverAddress, _port);
             client.Send(data, data.Length);
         }
-
-        private readonly Dictionary<Int32, UdpClient> _listeners = new Dictionary<int, UdpClient>();
-        private readonly string _serverAddress;
-        private readonly int _port;
-        private bool _stopped = false;
     }
 }

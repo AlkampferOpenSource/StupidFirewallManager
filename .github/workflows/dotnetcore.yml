@@ -18,9 +18,9 @@ jobs:
       run: dotnet restore src/StupidFirewallManager.sln
            
     - name: dotnet tests
-      run: dotnet build src/StupidFirewallManager.sln
+      run: dotnet build src/StupidFirewallManager.sln -configuration release
 
     - name: dotnet tests
-      run: dotnet test src/StupidFirewallManager.sln
+      run: dotnet test src/StupidFirewallManager.sln 
 
         

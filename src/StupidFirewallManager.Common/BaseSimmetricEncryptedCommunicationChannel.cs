@@ -36,23 +36,22 @@ namespace StupidFirewallManager.Common
             try
             {
                 var ms = new MemoryStream(receivedData);
-                using (BinaryReader sr = new BinaryReader(ms))
-                {
-                    var salt = sr.ReadBytes(EncryptionUtils.saltSize);
-                    port = sr.ReadInt32();
-                    var encryptedText = sr.ReadBytes(1000);
+                using BinaryReader sr = new BinaryReader(ms);
 
-                    //now we should try to decrypt the data.
-                    var portRule = _configuration.GetRuleFromTcpPort(port);
-                    if (portRule == null)
-                    {
-                        throw new SecurityException($"Unable to find rule for requested port {port}");
-                    }
-                    var decrypted = Encryptor.SimmetricDecrypt(portRule.Secret, salt, encryptedText);
-                    var decryptedDeserializedText = Encoding.UTF8.GetString(decrypted);
-                    var request = JsonConvert.DeserializeObject<OpenPortRequest>(decryptedDeserializedText);
-                    OpenPortRequestReceived?.Invoke(this, new OpenPortRequestEventArgs(request));
+                var salt = sr.ReadBytes(EncryptionUtils.saltSize);
+                port = sr.ReadInt32();
+                var encryptedText = sr.ReadBytes(1000);
+
+                //now we should try to decrypt the data.
+                var portRule = _configuration.GetRuleFromTcpPort(port);
+                if (portRule == null)
+                {
+                    throw new SecurityException($"Unable to find rule for requested port {port}");
                 }
+                var decrypted = Encryptor.SimmetricDecrypt(portRule.Secret, salt, encryptedText);
+                var decryptedDeserializedText = Encoding.UTF8.GetString(decrypted);
+                var request = JsonConvert.DeserializeObject<OpenPortRequest>(decryptedDeserializedText);
+                OpenPortRequestReceived?.Invoke(this, new OpenPortRequestEventArgs(request));
             }
             catch (CryptographicException)
             {
@@ -70,8 +69,6 @@ namespace StupidFirewallManager.Common
         protected BaseSimmetricEncryptedCommunicationChannelSender()
         {
         }
-
-        public event EventHandler<OpenPortRequestEventArgs> OpenPortRequestReceived;
 
         public bool SendOpenPortRequest(OpenPortRequest request, string password)
         {
