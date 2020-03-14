@@ -17,18 +17,10 @@ jobs:
     - name: Restore nuget with dotnet
       run: dotnet restore src/StupidFirewallManager.sln
            
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
-
-    - name: MSBuild
-      working-directory: src
-      run: msbuild StupidFirewallManager.sln /p:Configuration=Release
+    - name: dotnet tests
+      run: dotnet build src/StupidFirewallManager.sln
 
     - name: dotnet tests
-      run: dotnet test src/StupidFirewallManager.Tests/StupidFirewallManager.Tests.csproj
-
-    - name: dotnet publish
-      run: dotnet test src/StupidFirewallManager.Tests/StupidFirewallManager.Tests.csproj
-
+      run: dotnet test src/StupidFirewallManager.sln
 
         
