@@ -9,12 +9,10 @@ namespace StupidFirewallManager.Common.Encryption
 
         public static byte[] GenerateRandomSalt()
         {
-            using (var csp = new RNGCryptoServiceProvider())
-            {
-                byte[] salt = new byte[saltSize];
-                csp.GetBytes(salt);
-                return salt;
-            }
+            using var csp = new RNGCryptoServiceProvider();
+            byte[] salt = new byte[saltSize];
+            csp.GetBytes(salt);
+            return salt;
         }
 
         public static ICryptoTransform GetEncryptorFromPassword(
@@ -22,12 +20,10 @@ namespace StupidFirewallManager.Common.Encryption
             string password,
             byte[] salt)
         {
-            using (var pdb = new PasswordDeriveBytes(password, salt))
-            {
-                var key = pdb.GetBytes(32);
-                var IV = pdb.GetBytes(16);
-                return aes.CreateEncryptor(key, IV);
-            }
+            using var pdb = new PasswordDeriveBytes(password, salt);
+            var key = pdb.GetBytes(32);
+            var IV = pdb.GetBytes(16);
+            return aes.CreateEncryptor(key, IV);
         }
 
         public static ICryptoTransform GetDecryptorFromPassword(
@@ -35,12 +31,10 @@ namespace StupidFirewallManager.Common.Encryption
             string password,
             byte[] salt)
         {
-            using (var pdb = new PasswordDeriveBytes(password, salt))
-            {
-                var key = pdb.GetBytes(32);
-                var IV = pdb.GetBytes(16);
-                return aes.CreateDecryptor(key, IV);
-            }
+            using var pdb = new PasswordDeriveBytes(password, salt);
+            var key = pdb.GetBytes(32);
+            var IV = pdb.GetBytes(16);
+            return aes.CreateDecryptor(key, IV);
         }
     }
 }

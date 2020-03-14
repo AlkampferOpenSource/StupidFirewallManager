@@ -62,8 +62,8 @@ namespace StupidFirewallManager.Common
                 throw new SecurityException($"Malformed packets received from {sender} - {ex}");
             }
         }
-    } 
-    
+    }
+
     public abstract class BaseSimmetricEncryptedCommunicationChannelSender : ICommunicationChannel
     {
         protected BaseSimmetricEncryptedCommunicationChannelSender()
@@ -82,12 +82,12 @@ namespace StupidFirewallManager.Common
             var encrypted = Encryptor.SimmetricEncrypt(password, salt, serializedRequest);
 
             var ms = new MemoryStream();
-            using (BinaryWriter sw = new BinaryWriter(ms))
-            {
-                sw.Write(salt);
-                sw.Write(request.PortToOpen);
-                sw.Write(encrypted);
-            }
+            using BinaryWriter sw = new BinaryWriter(ms);
+
+            sw.Write(salt);
+            sw.Write(request.PortToOpen);
+            sw.Write(encrypted);
+
             OnSendRequest(ms.ToArray());
             return true;
         }
