@@ -23,4 +23,12 @@ jobs:
     - name: MSBuild
       working-directory: src
       run: msbuild StupidFirewallManager.sln /p:Configuration=Release
+
+    - name: dotnet tests
+      run: dotnet test src/StupidFirewallManager.Tests/StupidFirewallManager.Tests.csproj
+
+    - name: dotnet publish
+      run: dotnet test src/StupidFirewallManager.Tests/StupidFirewallManager.Tests.csproj
+
+
         
