@@ -1,5 +1,6 @@
 ﻿using NetFwTypeLib;
 using Serilog;
+using StupidFirewallManager.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace StupidFirewallManager.Core
         /// <param name="dateTime"></param>
         public void OpenPortWithTimeout(int tcpPort, IPEndPoint endpoint, DateTime dateTime)
         {
-            var ruleName = $"{Constants.TcpRulePrefix}{dateTime.ToString("yyyyMMddhhmm")}_{Guid.NewGuid().ToString()}";
+            var ruleName = $"{Constants.TcpRulePrefix}{dateTime.ToString("yyyyMMddHHmm")}_{Guid.NewGuid().ToString()}";
             INetFwPolicy2 fwPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
 
             INetFwRule firewallRule = (INetFwRule)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
@@ -150,7 +151,7 @@ namespace StupidFirewallManager.Core
                 if (DateTimeEncodingHelper.TryParse(rule.Name, out var dateTime))
                 {
                     //Indeed this is a rule made by this tool, check for exipiration
-                    if (dateTime.Subtract(DateTime.UtcNow).TotalSeconds < 0)
+                    if (DateTime.UtcNow.Subtract(dateTime).TotalSeconds > 0)
                     {
                         Log.Information("About to remove rule {name} because it is expired", rule.Name);
                         fwPolicy.Rules.Remove(rule.Name);

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using StupidFirewallManager.Common;
 using StupidFirewallManager.Core;
 
 namespace StupidFirewallManager.Tests.Explicit

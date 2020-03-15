@@ -1,0 +1,117 @@
+name: .NET Core
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+      
+    - name: Fetch all history for all tags and branches
+      run: git fetch --prune
+    
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9
+      with:
+          versionSpec: '5.1.x'
+    
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.9
+    - run: |
+        echo "Major: ${{ steps.gitversion.outputs.major }}"
+        echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+        echo "Patch: ${{ steps.gitversion.outputs.patch }}"
+        echo "PreReleaseTag: ${{ steps.gitversion.outputs.preReleaseTag }}"
+        echo "PreReleaseTagWithDash: ${{ steps.gitversion.outputs.preReleaseTagWithDash }}"
+        echo "PreReleaseLabel: ${{ steps.gitversion.outputs.preReleaseLabel }}"
+        echo "PreReleaseNumber: ${{ steps.gitversion.outputs.preReleaseNumber }}"
+        echo "WeightedPreReleaseNumber: ${{ steps.gitversion.outputs.weightedPreReleaseNumber }}"
+        echo "BuildMetaData: ${{ steps.gitversion.outputs.buildMetaData }}"
+        echo "BuildMetaDataPadded: ${{ steps.gitversion.outputs.buildMetaDataPadded }}"
+        echo "FullBuildMetaData: ${{ steps.gitversion.outputs.fullBuildMetaData }}"
+        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+        echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+        echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
+        echo "LegacySemVerPadded: ${{ steps.gitversion.outputs.legacySemVerPadded }}"
+        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+        echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
+        echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+        echo "InformationalVersion: ${{ steps.gitversion.outputs.informationalVersion }}"
+        echo "BranchName: ${{ steps.gitversion.outputs.branchName }}"
+        echo "Sha: ${{ steps.gitversion.outputs.sha }}"
+        echo "ShortSha: ${{ steps.gitversion.outputs.shortSha }}"
+        echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
+        echo "NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}"
+        echo "NuGetPreReleaseTagV2: ${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
+        echo "NuGetPreReleaseTag: ${{ steps.gitversion.outputs.nuGetPreReleaseTag }}"
+        echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
+        echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
+        echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
+        echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"
+        
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100    
+
+    - name: Restore nuget with dotnet
+      run: dotnet restore src/StupidFirewallManager.sln
+           
+    - name: dotnet tests
+      run: dotnet test src/StupidFirewallManager.sln 
+
+    - name: dotnet publish server
+      run: dotnet publish src/StupidFirewallManager/StupidFirewallManager.csproj --configuration release -p:Version=${{ steps.gitversion.outputs.assemblySemFileVer }}
+
+    - name: dotnet publish client
+      run: dotnet publish src/StupidFirewallManager.Client/StupidFirewallManager.Client.csproj --configuration release -p:Version=${{ steps.gitversion.outputs.assemblySemFileVer }}
+
+      
+   # - name: Create Release
+   #   if: contains(github.ref, "master")
+   #   uses: ncipollo/release-action@v1.6.1
+   #   with:
+   #     tag: "${{ steps.gitversion.outputs.fullSemVer }}"
+   #     # The Github token.
+   #    token: "${{ secrets.GITHUB_TOKEN }}" 
+    - name: Zip server
+      run: Compress-Archive -Path src/StupidFirewallManager/bin/release/netcoreapp3.1/publish -DestinationPath server.zip
+      #run: zip -qq -r ./server.zip src/StupidFirewallManager/bin/release/netcoreapp3.1/publish
+      
+    - name: Zip client
+      run: Compress-Archive -Path src/StupidFirewallManager.Client/bin/release/netcoreapp3.1/publish -DestinationPath client.zip
+      #run: zip -qq -r ./client.zip src/StupidFirewallManager.Client/bin/release/netcoreapp3.1/publish
+    
+    - uses: actions/upload-artifact@v1
+      with:
+        name: "StupidFirewallManagerServer-${{ steps.gitversion.outputs.fullSemVer }}"
+        path: server.zip
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: "StupidFirewallManagerClient-${{ steps.gitversion.outputs.fullSemVer }}"
+        path: client.zip
+
+    - name: Upload server binaries to release
+      if: contains(github.ref, 'master')
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: server.zip
+        asset_name: Server.zip
+        tag: "${{ steps.gitversion.outputs.fullSemVer }}"
+        overwrite: true
+        
+    - name: Upload client binaries to release
+      if: contains(github.ref, 'master')
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: client.zip
+        asset_name: Client.zip
+        tag: "${{ steps.gitversion.outputs.fullSemVer }}"
+        overwrite: true
