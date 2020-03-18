@@ -20,6 +20,11 @@ jobs:
     - name: Fetch all history for all tags and branches
       run: git fetch --prune
     
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.100-preview.1.20155.7'  
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9
       with:
@@ -59,11 +64,6 @@ jobs:
         echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
         echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
         echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"
-        
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.100    
 
     - name: Restore nuget with dotnet
       run: dotnet restore src/StupidFirewallManager.sln
@@ -86,11 +86,11 @@ jobs:
    #     # The Github token.
    #    token: "${{ secrets.GITHUB_TOKEN }}" 
     - name: Zip server
-      run: Compress-Archive -Path src/StupidFirewallManager/bin/release/netcoreapp3.1/publish -DestinationPath server.zip
+      run: Compress-Archive -Path src/StupidFirewallManager/bin/release/netcoreapp5.0/publish -DestinationPath server.zip
       #run: zip -qq -r ./server.zip src/StupidFirewallManager/bin/release/netcoreapp3.1/publish
       
     - name: Zip client
-      run: Compress-Archive -Path src/StupidFirewallManager.Client/bin/release/netcoreapp3.1/publish -DestinationPath client.zip
+      run: Compress-Archive -Path src/StupidFirewallManager.Client/bin/release/netcoreapp5.0/publish -DestinationPath client.zip
       #run: zip -qq -r ./client.zip src/StupidFirewallManager.Client/bin/release/netcoreapp3.1/publish
     
     - uses: actions/upload-artifact@v1
