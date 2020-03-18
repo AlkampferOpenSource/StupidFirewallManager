@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 namespace StupidFirewallManager.Core
 {
-    public class FirewallManager
+    public class FirewallManager : IFirewallManager
     {
         public IEnumerable<INetFwRule> SearchFirewallRules()
         {

@@ -85,31 +85,37 @@ jobs:
    #     tag: "${{ steps.gitversion.outputs.fullSemVer }}"
    #     # The Github token.
    #    token: "${{ secrets.GITHUB_TOKEN }}" 
-    - name: Zip server
-      run: Compress-Archive -Path src/StupidFirewallManager/bin/release/netcoreapp5.0/publish -DestinationPath server.zip
-      #run: zip -qq -r ./server.zip src/StupidFirewallManager/bin/release/netcoreapp3.1/publish
+    # - name: Zip server
+    #   run: Compress-Archive -Path src/StupidFirewallManager/bin/release/netcoreapp3.1/publish -DestinationPath server.zip
+    #   #run: zip -qq -r ./server.zip src/StupidFirewallManager/bin/release/netcoreapp3.1/publish
       
-    - name: Zip client
-      run: Compress-Archive -Path src/StupidFirewallManager.Client/bin/release/netcoreapp5.0/publish -DestinationPath client.zip
-      #run: zip -qq -r ./client.zip src/StupidFirewallManager.Client/bin/release/netcoreapp3.1/publish
+    # - name: Zip client
+    #   run: Compress-Archive -Path src/StupidFirewallManager.Client/bin/release/netcoreapp3.1/publish -DestinationPath client.zip
+    #   #run: zip -qq -r ./client.zip src/StupidFirewallManager.Client/bin/release/netcoreapp3.1/publish
     
+    - name: 7Zip client
+      run: 7z a -t7z -mx=9 client.7z ./src/StupidFirewallManager.Client/bin/release/netcoreapp5.0/publish/
+    
+    - name: 7Zip server
+      run: 7z a -t7z -mx=9 server.7z ./src/StupidFirewallManager/bin/release/netcoreapp5.0/publish/
+
     - uses: actions/upload-artifact@v1
       with:
         name: "StupidFirewallManagerServer-${{ steps.gitversion.outputs.fullSemVer }}"
-        path: server.zip
+        path: server.7z
 
     - uses: actions/upload-artifact@v1
       with:
         name: "StupidFirewallManagerClient-${{ steps.gitversion.outputs.fullSemVer }}"
-        path: client.zip
+        path: client.7z
 
     - name: Upload server binaries to release
       if: contains(github.ref, 'master')
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: server.zip
-        asset_name: Server.zip
+        file: server.7z
+        asset_name: Server.7z
         tag: "${{ steps.gitversion.outputs.fullSemVer }}"
         overwrite: true
         
@@ -118,7 +124,7 @@ jobs:
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: client.zip
-        asset_name: Client.zip
+        file: client.7z
+        asset_name: Client.7z
         tag: "${{ steps.gitversion.outputs.fullSemVer }}"
         overwrite: true
