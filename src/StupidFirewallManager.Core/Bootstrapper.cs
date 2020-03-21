@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Exceptions;
 using StupidFirewallManager.Common;
@@ -8,6 +10,8 @@ namespace StupidFirewallManager.Core
 {
     public static class Bootstrapper
     {
+        private static WindsorContainer Container { get; set; }
+
         static Bootstrapper()
         {
             Log.Logger = new LoggerConfiguration()
@@ -24,6 +28,8 @@ namespace StupidFirewallManager.Core
                )
                .WriteTo.Console()
                .CreateLogger();
+
+            Container = new WindsorContainer();
         }
 
         public static Configuration Configuration { get; private set; }
@@ -38,6 +44,8 @@ namespace StupidFirewallManager.Core
                .Build();
 
             Configuration.Bind(configBuilder);
+
+            Container.Register(Component.For<Configuration>().Instance(Configuration));
         }
     }
 }

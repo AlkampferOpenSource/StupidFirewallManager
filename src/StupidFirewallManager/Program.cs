@@ -1,53 +1,91 @@
-﻿
-using Serilog;
-using StupidFirewallManager.Common;
+﻿using Serilog;
 using StupidFirewallManager.Core;
+using StupidFirewallManager.Support;
 using System;
-using System.Net;
+using Topshelf;
 
 namespace StupidFirewallManager
 {
-    static class Program
+    public static class Program
     {
-        private static Sealer Sealer { get; set; }
+        private const string ServiceDescriptiveName = "Stupid firewall manager";
+        private const string ServiceName = "StupidFirewallManager";
 
-        private static SymmetricEncryptedUdpCommunicationChannelReceiver Channel { get; set; }
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Bootstrapper.Initialize();
-            Sealer = new Sealer(Bootstrapper.Configuration);
-            Sealer.Seal();
 
-            Channel = new SymmetricEncryptedUdpCommunicationChannelReceiver(Bootstrapper.Configuration);
-            Channel.OpenPortRequestReceived += Channel_OpenPortRequestReceived;
-            
-            foreach (var rule in Bootstrapper.Configuration.Rules)
+            if (args.Length == 1 && (args[0] == "install" || args[0] == "uninstall"))
             {
-                Channel.StartListeningOnPort(rule.UdpPort);
+                StartForInstallOrUninstall(ServiceDescriptiveName, ServiceName);
             }
-
-            Console.WriteLine("Press a key to close.");
-            Console.ReadKey();
+            else
+            {
+                var exitCode = StandardStart();
+                if (exitCode != TopshelfExitCode.Ok && Environment.UserInteractive)
+                {
+                    Console.WriteLine("Service exited with error code {0} press a key to close", exitCode);
+                    Console.ReadKey();
+                }
+            }
         }
 
-        private static void Channel_OpenPortRequestReceived(object sender, OpenPortRequestEventArgs e)
+        /// <summary>
+        /// Method called to install/uninstall the service
+        /// </summary>
+        /// <param name="runAsSystem"></param>
+        /// <param name="dependOnServiceList"></param>
+        /// <param name="serviceDescriptiveName"></param>
+        /// <param name="serviceName"></param>
+        /// <returns></returns>
+        public static TopshelfExitCode StartForInstallOrUninstall(
+            String serviceDescriptiveName,
+            String serviceName)
         {
-            var rule = Bootstrapper.Configuration.GetRuleFromTcpPort(e.Request.PortToOpen);
-            if (rule == null)
+            var exitCode = HostFactory.Run(host =>
             {
-                Log.Error("Received message from unknown port {port} - Check firewall because it should be closed received from ip {ip}", e.Request.PortToOpen, e.Request.IpAddress);
-                return;
-            }
-            Log.Information("Checking udp message in port {port} bound to rule for tcp port {tcpport} received from ip {ip}", e.Request.PortToOpen, rule.TcpPort, e.Request.IpAddress);
-            if (rule.TcpPort != e.Request.PortToOpen)
+                host.Service<Object>(service =>
+                {
+                    service.ConstructUsing(() => new Object());
+                    service.WhenStarted(_ => Console.WriteLine("Start fake for install"));
+                    service.WhenStopped(_ => Console.WriteLine("Stop fake for install"));
+                });
+
+                host.RunAsLocalSystem();
+
+                host.SetDescription(serviceDescriptiveName);
+                host.SetDisplayName(serviceDescriptiveName);
+                host.SetServiceName(serviceName);
+            });
+            return exitCode;
+        }
+
+        private static TopshelfExitCode StandardStart()
+        {
+            if (Environment.UserInteractive)
             {
-                Log.Error("Received wrong requesto to open port {port} bound to rule for tcp port {tcpport} received from ip {ip}", e.Request.PortToOpen, rule.TcpPort, e.Request.IpAddress);
-                return;
+                Console.Title = ServiceDescriptiveName;
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
+                Console.Clear();
+                Console.SetWindowPosition(0, 0);
+                Console.WindowWidth = Console.LargestWindowWidth - 80;
             }
 
-            Log.Information("CORRECT! udp message in port {port} bound to rule for tcp port {tcpport} received from ip {ip}", e.Request.PortToOpen, rule.TcpPort, e.Request.IpAddress);
-            Sealer.OpenPortWithTimeout(rule.TcpPort, IPEndPoint.Parse(e.Request.IpAddress), new DateTime(Math.Min(e.Request.EndOpeningDate.Ticks, DateTime.Now.AddHours(4).Ticks)));
+            return HostFactory.Run(x =>
+            {
+                Log.Information("Windows stupid firewall started");
+                x.UseSerilog(Log.Logger);
+                x.Service<ServiceBootstrapper>(s =>
+                {
+                    s.ConstructUsing(_ => new ServiceBootstrapper());
+                    s.WhenStarted((tc, hc) => tc.Start(hc));
+                    s.WhenStopped((tc, hc) => tc.Stop(hc));
+                });
+
+                x.SetDescription(ServiceDescriptiveName);
+                x.SetDisplayName(ServiceDescriptiveName);
+                x.SetServiceName(ServiceName);
+            });
         }
     }
 }
