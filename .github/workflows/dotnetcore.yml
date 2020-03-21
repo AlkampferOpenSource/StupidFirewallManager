@@ -69,7 +69,7 @@ jobs:
       run: dotnet restore src/StupidFirewallManager.sln
            
     - name: dotnet tests
-      run: dotnet test src/StupidFirewallManager.sln 
+      run: dotnet test src/StupidFirewallManager.sln /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
 
     - name: dotnet publish server
       run: dotnet publish src/StupidFirewallManager/StupidFirewallManager.csproj --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
