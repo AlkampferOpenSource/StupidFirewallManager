@@ -72,10 +72,10 @@ jobs:
       run: dotnet test src/StupidFirewallManager.sln 
 
     - name: dotnet publish server
-      run: dotnet publish src/StupidFirewallManager/StupidFirewallManager.csproj --configuration release -p:Version=${{ steps.gitversion.outputs.assemblySemFileVer }}
+      run: dotnet publish src/StupidFirewallManager/StupidFirewallManager.csproj --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
 
     - name: dotnet publish client
-      run: dotnet publish src/StupidFirewallManager.Client/StupidFirewallManager.Client.csproj --configuration release -p:Version=${{ steps.gitversion.outputs.assemblySemFileVer }}
+      run: dotnet publish src/StupidFirewallManager.Client/StupidFirewallManager.Client.csproj --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
 
       
    # - name: Create Release
