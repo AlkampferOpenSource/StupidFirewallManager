@@ -19,6 +19,7 @@ namespace StupidFirewallManager.Common
         {
             var client = new UdpClient(port);
             var thread = new Thread(Listen);
+            _listeners.Add(port, client);
             thread.Start(new UdpData { Client = client, Port = port });
         }
 
