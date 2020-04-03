@@ -74,14 +74,7 @@ namespace StupidFirewallManager
 
         private static TopshelfExitCode StandardStart()
         {
-            if (Environment.UserInteractive)
-            {
-                Console.Title = ServiceDescriptiveName;
-                Console.BackgroundColor = ConsoleColor.DarkYellow;
-                Console.Clear();
-                Console.SetWindowPosition(0, 0);
-                Console.WindowWidth = Console.LargestWindowWidth - 80;
-            }
+            SetUi();
 
             return HostFactory.Run(x =>
             {
@@ -98,6 +91,25 @@ namespace StupidFirewallManager
                 x.SetDisplayName(ServiceDescriptiveName);
                 x.SetServiceName(ServiceName);
             });
+        }
+
+        private static void SetUi()
+        {
+            try
+            {
+                if (Environment.UserInteractive)
+                {
+                    Console.Title = ServiceDescriptiveName;
+                    Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    Console.Clear();
+                    Console.SetWindowPosition(0, 0);
+                    Console.WindowWidth = Console.LargestWindowWidth - 80;
+                }
+            }
+            catch (Exception)
+            {
+                //Something strange happened, but we can safely ignore.
+            }
         }
     }
 }
