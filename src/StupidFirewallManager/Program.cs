@@ -2,6 +2,7 @@
 using StupidFirewallManager.Core;
 using StupidFirewallManager.Support;
 using System;
+using System.IO;
 using Topshelf;
 
 namespace StupidFirewallManager
@@ -13,20 +14,31 @@ namespace StupidFirewallManager
 
         private static void Main(string[] args)
         {
-            Bootstrapper.Initialize();
+            var lastErrorFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_lastError.txt");
+            if (File.Exists(lastErrorFile)) File.Delete(lastErrorFile);
 
-            if (args.Length == 1 && (args[0] == "install" || args[0] == "uninstall"))
+            try
             {
-                StartForInstallOrUninstall(ServiceDescriptiveName, ServiceName);
-            }
-            else
-            {
-                var exitCode = StandardStart();
-                if (exitCode != TopshelfExitCode.Ok && Environment.UserInteractive)
+                Bootstrapper.Initialize();
+
+                if (args.Length == 1 && (args[0] == "install" || args[0] == "uninstall"))
                 {
-                    Console.WriteLine("Service exited with error code {0} press a key to close", exitCode);
-                    Console.ReadKey();
+                    StartForInstallOrUninstall(ServiceDescriptiveName, ServiceName);
                 }
+                else
+                {
+                    var exitCode = StandardStart();
+                    if (exitCode != TopshelfExitCode.Ok && Environment.UserInteractive)
+                    {
+                        Console.WriteLine("Service exited with error code {0} press a key to close", exitCode);
+                        Console.ReadKey();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText(lastErrorFile, ex.ToString());
+                throw;
             }
         }
 
